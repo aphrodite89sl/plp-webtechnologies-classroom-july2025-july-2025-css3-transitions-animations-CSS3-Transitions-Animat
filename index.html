@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS3 & JavaScript Animation Showcase</title>
+    <style>
+        /* ===== PART 1: CSS3 TRANSITIONS AND ANIMATIONS ===== */
+        
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 0.5rem;
+        }
+        
+        section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        .demo-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+        
+        .demo-box {
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        /* Button hover effects */
+        .btn {
+            padding: 12px 24px;
+            background: #4a00e0;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:hover {
+            background: #8e2de2;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        /* Continuous keyframe animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes slide {
+            0% { transform: translateX(-50px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        
+        .slide-animation {
+            animation: slide 1s ease-out;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .rotate-animation {
+            animation: rotate 3s linear infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .bounce-animation {
+            animation: bounce 1s infinite;
+        }
+        
+        /* Card flip animation */
+        .card-container {
+            perspective: 1000px;
+            width: 200px;
+            height: 250px;
+        }
+        
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+            cursor: pointer;
+        }
+        
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-front {
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+        }
+        
+        .card-back {
+            background: linear-gradient(45deg, #ff7e5f, #feb47b);
+            transform: rotateY(180deg);
+        }
+        
+        /* Modal styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: white;
+            color: #333;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            transform: translateY(-50px);
+            transition: transform 0.5s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+        }
+        
+        /* Loading animation */
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid white;
+            border-radius: 50%;
+            animation: rotate 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        .loading-text {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        /* ===== PART 3: JS-CONTROLLED ANIMATIONS ===== */
+        
+        .js-animation-box {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(45deg, #ff6b6b, #ffa36c);
+            border-radius: 10px;
+            transition: all 0.5s ease;
+        }
+        
+        .js-animation-box.active {
+            transform: scale(1.2) rotate(15deg);
+            background: linear-gradient(45deg, #6bff7d, #6cd5ff);
+            border-radius: 50%;
+        }
+        
+        .color-change-box {
+            width: 150px;
+            height: 150px;
+            background: #ff6b6b;
+            border-radius: 10px;
+            transition: all 0.5s ease;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CSS3 & JavaScript Animation Showcase</h1>
+        <p>An interactive demonstration of CSS transitions, animations, and JavaScript functions</p>
+    </header>
+    
+    <!-- Part 1: CSS3 Transitions and Animations -->
+    <section id="part1">
+        <h2>🎨✨ Part 1: CSS3 Transitions and Animations</h2>
+        <p>These animations are triggered purely by CSS - no JavaScript involved!</p>
+        
+        <div class="demo-container">
+            <div class="demo-box pulse-animation">Pulse</div>
+            <div class="demo-box slide-animation">Slide In</div>
+            <div class="demo-box rotate-animation">Rotate</div>
+            <div class="demo-box bounce-animation">Bounce</div>
+            <button class="btn">Hover Me!</button>
+        </div>
+        
+        <h3>Card Flip Animation (CSS only)</h3>
+        <div class="demo-container">
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-face card-front">Front</div>
+                    <div class="card-face card-back">Back</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Part 2: JavaScript Functions -->
+    <section id="part2">
+        <h2>📚✨ Part 2: JavaScript Functions</h2>
+        <p>Demonstrating scope, parameters, return values, and reusable functions</p>
+        
+        <div class="demo-container">
+            <div>
+                <h3>Function Demonstrations</h3>
+                <button id="calculateBtn" class="btn">Calculate Area</button>
+                <button id="greetBtn" class="btn">Personalized Greeting</button>
+                <button id="counterBtn" class="btn">Increment Counter</button>
+            </div>
+            
+            <div>
+                <h3>Results</h3>
+                <div id="functionResults" style="min-height: 150px; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                    Function results will appear here
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Part 3: Combining CSS Animations with JavaScript -->
+    <section id="part3">
+        <h2>🎨🎬 Part 3: Combining CSS & JavaScript</h2>
+        <p>Using JavaScript to dynamically trigger CSS animations</p>
+        
+        <div class="demo-container">
+            <div>
+                <h3>Animation Controls</h3>
+                <div class="js-animation-box" id="jsAnimationBox">Click to Animate</div>
+                <div class="controls">
+                    <button id="toggleAnimation" class="btn">Toggle Animation</button>
+                    <button id="resetAnimation" class="btn">Reset</button>
+                </div>
+            </div>
+            
+            <div>
+                <h3>Color Changer</h3>
+                <div class="color-change-box" id="colorBox"></div>
+                <div class="controls">
+                    <button id="changeColor" class="btn">Change Color</button>
+                    <button id="randomColor" class="btn">Random Color</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-container">
+            <div>
+                <h3>Modal Animation</h3>
+                <button id="openModal" class="btn">Open Modal</button>
+            </div>
+            
+            <div>
+                <h3>Loading Animation</h3>
+                <button id="toggleLoader" class="btn">Toggle Loader</button>
+                <div id="loaderContainer" style="display: none; margin-top: 1rem;">
+                    <div class="loader"></div>
+                    <p class="loading-text">Loading...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeModal">&times;</button>
+            <h2>Animated Modal</h2>
+            <p>This modal uses a combination of CSS transitions and JavaScript to create a smooth entrance and exit animation.</p>
+            <p>The animation is triggered by adding/removing CSS classes with JavaScript.</p>
+        </div>
+    </div>
+    
+    <script>
+        // ===== PART 2: JAVASCRIPT FUNCTIONS =====
+        
+        // Global variables
+        let globalCounter = 0;
+        
+        // Function with parameters and return value
+        function calculateRectangleArea(width, height) {
+            // Local variables - only accessible within this function
+            const area = width * height;
+            return area;
+        }
+        
+        // Function demonstrating scope
+        function updateCounter(increment = 1) {
+            // This function modifies the global variable
+            globalCounter += increment;
+            return globalCounter;
+        }
+        
+        // Function with default parameters
+        function createGreeting(name = "Guest", timeOfDay = "day") {
+            // Local variable
+            const greeting = `Hello ${name}! Have a wonderful ${timeOfDay}!`;
+            return greeting;
+        }
+        
+        // Reusable function for displaying results
+        function displayResult(message, elementId = "functionResults") {
+            const resultElement = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            resultElement.innerHTML += `<p><strong>[${timestamp}]</strong> ${message}</p>`;
+            resultElement.scrollTop = resultElement.scrollHeight;
+        }
+        
+        // Event listeners for function demonstrations
+        document.getElementById('calculateBtn').addEventListener('click', function() {
+            const width = Math.floor(Math.random() * 20) + 5;
+            const height = Math.floor(Math.random() * 20) + 5;
+            const area = calculateRectangleArea(width, height);
+            displayResult(`Rectangle area: ${width} × ${height} = ${area}`);
+        });
+        
+        document.getElementById('greetBtn').addEventListener('click', function() {
+            const names = ["Alice", "Bob", "Charlie", "Diana"];
+            const times = ["morning", "afternoon", "evening", "night"];
+            const randomName = names[Math.floor(Math.random() * names.length)];
+            const randomTime = times[Math.floor(Math.random() * times.length)];
+            const greeting = createGreeting(randomName, randomTime);
+            displayResult(greeting);
+        });
+        
+        document.getElementById('counterBtn').addEventListener('click', function() {
+            const newValue = updateCounter();
+            displayResult(`Counter value: ${newValue}`);
+        });
+        
+        // ===== PART 3: COMBINING CSS ANIMATIONS WITH JAVASCRIPT =====
+        
+        // Function to toggle animation class
+        function toggleAnimation(elementId, className) {
+            const element = document.getElementById(elementId);
+            element.classList.toggle(className);
+        }
+        
+        // Function to generate random color
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+        
+        // Reusable function for modal control
+        function toggleModal(modalId, show) {
+            const modal = document.getElementById(modalId);
+            if (show) {
+                modal.classList.add('active');
+            } else {
+                modal.classList.remove('active');
+            }
+        }
+        
+        // Event listeners for animation controls
+        document.getElementById('toggleAnimation').addEventListener('click', function() {
+            toggleAnimation('jsAnimationBox', 'active');
+        });
+        
+        document.getElementById('resetAnimation').addEventListener('click', function() {
+            document.getElementById('jsAnimationBox').classList.remove('active');
+        });
+        
+        document.getElementById('jsAnimationBox').addEventListener('click', function() {
+            toggleAnimation('jsAnimationBox', 'active');
+        });
+        
+        document.getElementById('changeColor').addEventListener('click', function() {
+            const colors = ['#ff6b6b', '#6bff7d', '#6cd5ff', '#ffa36c', '#d66bff'];
+            const currentColor = document.getElementById('colorBox').style.backgroundColor;
+            let newColor;
+            
+            do {
+                newColor = colors[Math.floor(Math.random() * colors.length)];
+            } while (newColor === currentColor);
+            
+            document.getElementById('colorBox').style.backgroundColor = newColor;
+        });
+        
+        document.getElementById('randomColor').addEventListener('click', function() {
+            document.getElementById('colorBox').style.backgroundColor = getRandomColor();
+        });
+        
+        document.getElementById('openModal').addEventListener('click', function() {
+            toggleModal('modal', true);
+        });
+        
+        document.getElementById('closeModal').addEventListener('click', function() {
+            toggleModal('modal', false);
+        });
+        
+        document.getElementById('toggleLoader').addEventListener('click', function() {
+            const loader = document.getElementById('loaderContainer');
+            loader.style.display = loader.style.display === 'none' ? 'block' : 'none';
+        });
+        
+        // Card flip animation
+        document.querySelector('.card').addEventListener('click', function() {
+            this.classList.toggle('flipped');
+        });
+        
+        // Close modal when clicking outside content
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                toggleModal('modal', false);
+            }
+        });
+    </script>
+</body>
+</html>
